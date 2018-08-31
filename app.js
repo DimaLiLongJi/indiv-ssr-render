@@ -1,24 +1,29 @@
-const express = require('express');
-const path = require('path');
+// const express = require('express');
+// const path = require('path');
 
-const app = express();
+const Window = require('window');
 
-// ejs 相关
-app.engine('.html', require('ejs').__express);
+// const app = express();
 
-app.set('view engine', 'html');
+// // ejs 相关
+// app.engine('.html', require('ejs').__express);
 
-// 静态文件
-app.set('views', './');
-app.use(express.static(path.join(__dirname, 'dist')));
+// app.set('view engine', 'html');
 
-app.use('/demo', (req, res, next) => {
-  res.render('index.html');
-});
+// // 静态文件
+// app.set('views', './');
+// app.use(express.static(path.join(__dirname, 'dist')));
 
-app.listen(1234);
-console.log(`listening port 1234`);
+// app.use('/demo', (req, res, next) => {
+//   res.render('index.html');
+// });
 
+// app.listen(1234);
+// console.log(`listening port 1234`);
 
+const window = new Window();
 
-module.exports = app;
+const div = window.document.createElement('div');
+console.log(111111, div);
+
+// module.exports = app;
