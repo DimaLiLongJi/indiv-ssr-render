@@ -4,7 +4,8 @@
   "description": "ssr render for indiv",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "parcel build ./public/main.ts -d dist && nodemon app.js",
+    "build": "rm -rf build && parcel build ./src/index.ts -d build"
   },
   "repository": {
     "type": "git",
