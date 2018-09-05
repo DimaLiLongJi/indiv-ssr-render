@@ -1,98 +1,31 @@
-const { factoryCreator, factoryModule } = require('indiv');
-// const Compile = require('./compile');
+const { factoryModule, factoryCreator } = require('indiv');
+const { buildPath, findRoutes, findComponent } = require('./getComponent');
 
-function buildPath(url) {
-  const renderRouteList = url === '/' ? ['/'] : url.split('/');
-  renderRouteList[0] = '/';
-  return renderRouteList;
-}
+const Window = require('window');
 
-function instantiateComponent(FindComponent, rootModule) {
-  const component = factoryCreator(FindComponent, rootModule);
-  component.$vm = this;
-  component.$components = rootModule.$components;
-  if (component.nvOnInit) component.nvOnInit();
-  if (component.watchData) component.watchData();
-  return component;
-}
-
-function findComponent(pathList, routes, rootModule) {
-  const routesList = [];
-
-  for (let index = 0; index < pathList.length; index++) {
-    const path = pathList[index];
-    if (index === 0) {
-      const rootRoute = routes.find(route => route.path === `${path}` || /^\/\:.+/.test(route.path));
-      if (!rootRoute) {
-        console.error('route error: wrong route instantiation in generalDistributeRoutes:', this.currentUrl);
-        return;
-      }
-
-      let FindComponent = null;
-      if (rootModule.$components.find((component) => component.$selector === rootRoute.component)) {
-        FindComponent = rootModule.$components.find((component) => component.$selector === rootRoute.component);
-      } else {
-        console.error(`route error: path ${rootRoute.path} is undefined`);
-        return;
-      }
-
-      routesList.push(rootRoute);
-
-      const component = instantiateComponent(FindComponent, rootModule);
-      // 因为没有 所有要push进去
-      // if (component) this.hasRenderComponentList.push(component);
-
-      // if (index === pathList.length - 1) this.routerChangeEvent(index);
-
-      if (rootRoute.redirectTo && /^\/.*/.test(rootRoute.redirectTo) && (index + 1) === pathList.length) {
-        // this.needRedirectPath = rootRoute.redirectTo;
-        // pathList.push(rootRoute.redirectTo);
-        
-        return;
-      }
-    } else {
-      const lastRoute = routesList[index - 1].children;
-      if (!lastRoute || !(lastRoute instanceof Array)) {
-        console.error('route error: routes not exit or routes must be an array!');
-      }
-      const route = lastRoute.find(r => r.path === `/${path}` || /^\/\:.+/.test(r.path));
-      if (!route) {
-        console.error('route error: wrong route instantiation:', this.currentUrl);
-        return;
-      }
-
-      let FindComponent = null;
-      if (rootModule.$components.find((component) => component.$selector === route.component)) {
-        FindComponent = rootModule.$components.find((component) => component.$selector === route.component);
-      }
-
-      if (!route.component && !route.redirectTo) {
-        console.error(`route error: path ${route.path} need a component which has children path or need a  redirectTo which has't children path`);
-        return;
-      }
-
-      routesList.push(route);
-
-      if (FindComponent) {
-        const component = instantiateComponent(FindComponent, rootModule);
-        // if (component) this.hasRenderComponentList.push(component);
-      }
-
-      if (route.redirectTo && /^\/.*/.test(route.redirectTo) && (index + 1) === pathList.length) {
-        // this.needRedirectPath = route.redirectTo;
-        return;
-      }
-    }
-  }
-  return routesList;
-}
+const window = new Window();
+const document = window.document;
+const Compile = require('./compile');
 
 function renderToString(url, routes, RootModule) {
   const pathList = buildPath(url);
   const rootModule =  factoryModule(RootModule);
-  // console.log('pathList', pathList);
-  const routesList = findComponent(pathList, routes, rootModule);
-  console.log(111111, routesList);
+  const routesList = findRoutes(pathList, routes, rootModule);
+  const componentList = findComponent(routesList, rootModule);
+
+  // render component
+  const documentFragment = document.createDocumentFragment();
+  componentList.forEach((component, index) => {
+    const com = factoryCreator(component, rootModule);
+    if (index === 0) {
+      new Compile(com, documentFragment);
+    } else {
+      const el = documentFragment.querySelectorAll('router-render')[0];
+      new Compile(com, el);
+    }
+  });
+
+  console.log(111111111, documentFragment);
   return '11';
 }
 

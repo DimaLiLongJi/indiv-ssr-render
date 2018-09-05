@@ -6,10 +6,16 @@ const window = new Window();
 const document = window.document;
 
 class Compile {
-  constructor(vm) {
+  constructor(vm, el) {
     this.$vm = vm;
     this.$fragment = this.node2Fragment();
     this.init();
+    this.$el = el;
+    if (this.$el) {
+      Array.from(this.$fragment.childNodes).forEach(child => {
+        this.$el.appendChild(child);
+      });
+    }
   }
 
   init() {
