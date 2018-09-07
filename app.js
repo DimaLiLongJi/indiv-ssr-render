@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 app.set('views', './');
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.use('/demo', (req, res, next) => {
+app.use('/indiv-doc', (req, res, next) => {
   res.render('index.ejs', {
     content: render(req.url),
   });

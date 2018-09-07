@@ -1,10 +1,10 @@
 {
-  "name": "indiv-ssr-render",
+  "name": "@indiv/ssr-render",
   "version": "1.0.0",
   "description": "ssr render for indiv",
-  "main": "index.js",
+  "main": "/src/index.js",
   "scripts": {
-    "start": "parcel build ./public/main.ts -d dist && nodemon app.js",
+    "start": "rm -rf dist && parcel watch ./public/main.ts -d dist & nodemon app.js",
     "build": "rm -rf build && parcel build ./src/index.ts -d build"
   },
   "repository": {
@@ -23,7 +23,10 @@
     "eslint": "^5.4.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-react": "^7.11.1",
     "express": "^4.16.3",
+    "less": "^3.8.1",
     "nodemon": "^1.18.4",
     "parcel-bundler": "^1.9.7",
     "tslint": "^5.11.0",

@@ -9,8 +9,8 @@ module.exports = {
     ecmaVersion: 7,
     sourceType: 'module',
   },
-  extends: ['airbnb-base', 'react'],
-  plugins: ['import', 'react'],
+  extends: ['airbnb-base'],
+  plugins: ['import'],
   rules: {
     'indent': [1, 2],
     'quotes': [
@@ -35,12 +35,6 @@ module.exports = {
         variables: true,
       },
     ],
-    // 'no-param-reassign': [
-    //   'error',
-    //   {
-    //     props: false,
-    //   },
-    // ],
     'no-prototype-builtins': 0,
     'no-self-compare': 0,
     'no-dynamic-require': 0,
@@ -63,9 +57,6 @@ module.exports = {
     'class-methods-use-this': 0,
     'prefer-reflect': 0,
     'operator-linebreak': 0,
-    'react/jsx-uses-react': 1,
-    'react/jsx-uses-vars': 1,
-    'react/prop-types': 0,
     'no-alert': 0,
     'max-params': [0, 20],
     'no-unused-expressions': 0,

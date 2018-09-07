@@ -1,3 +1,4 @@
+// import { Service } from 'indiv';
 import { Service } from '../../../InDiv/src';
 
 @Service({

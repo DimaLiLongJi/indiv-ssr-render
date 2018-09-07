@@ -1,3 +1,5 @@
+import './style.less';
+
 // import { Component } from 'indiv';
 import { Component } from '../../../../InDiv/src';
 

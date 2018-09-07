@@ -1,6 +1,6 @@
 const Window = require('window');
 const { formatInnerHTML } = require('./utils');
-const { CompileUtil } = require('./compileUtils');
+const { CompileUtil } = require('../../InDiv/build');
 
 const window = new Window();
 const document = window.document;
