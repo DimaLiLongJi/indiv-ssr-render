@@ -1,9 +1,23 @@
+/**
+ * build path to route
+ *
+ * @param {string} url
+ * @returns array<Route>
+ */
 function buildPath(url) {
   const renderRouteList = url === '/' ? ['/'] : url.split('/');
   renderRouteList[0] = '/';
   return renderRouteList;
 }
 
+/**
+ * find route via rootModule
+ *
+ * @param {array<string>} pathList
+ * @param {array<Route>} routes
+ * @param {NvModule} rootModule
+ * @returns array<string>
+ */
 function findRoutes(pathList, routes, rootModule) {
   let routesList = [];
 
@@ -19,7 +33,7 @@ function findRoutes(pathList, routes, rootModule) {
       routesList.push(rootRoute);
 
       if (rootRoute.redirectTo && /^\/.*/.test(rootRoute.redirectTo) && (index + 1) === pathList.length) {
-        const redirectToPathList = buildPath(route.redirectTo);
+        const redirectToPathList = buildPath(rootRoute.redirectTo);
         routesList = findRoutes(redirectToPathList, routes, rootModule);
         return routesList;;
       }
@@ -52,6 +66,13 @@ function findRoutes(pathList, routes, rootModule) {
   return routesList;
 }
 
+/**
+ * find components via rootModule 
+ *
+ * @param {array<Route>} routes
+ * @param {NvModule} rootModule
+ * @returns array<IComponent>
+ */
 function findComponent(routes, rootModule) {
   return routes.map(route => {
     const com = rootModule.$components.find(component => component.$selector === route.component);

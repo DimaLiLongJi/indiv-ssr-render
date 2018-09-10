@@ -1,11 +1,8 @@
 const renderToString = require('./src');
-const { ssrData } = require('./dist/main');
-
-const routes = ssrData.routes;
-const RootModule = ssrData.RootModule;
+const ssrData = require('./dist/main');
 
 const render = (url) => {
-  const content = renderToString(url, routes, RootModule);
+  const content = renderToString(url, ssrData.default.routes, ssrData.default.inDiv);
   return content;
 }
 

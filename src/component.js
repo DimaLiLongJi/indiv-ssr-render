@@ -1,8 +1,16 @@
 const Compile = require('./compile');
 const { factoryCreator } = require('indiv');
 
-
-function instantiateComponent(FindComponent, rootModule, renderDOM) {
+/**
+ * instantiate component
+ *
+ * @param {IComponent} FindComponent
+ * @param {NvModule} rootModule
+ * @param {Node} renderDOM
+ * @param {string} routeDOMKey
+ * @returns IComponent || boolean
+ */
+function instantiateComponent(FindComponent, rootModule, renderDOM, routeDOMKey) {
   // 构建 组件实例
   const component = factoryCreator(FindComponent, rootModule);
 
@@ -11,7 +19,7 @@ function instantiateComponent(FindComponent, rootModule, renderDOM) {
 
   // 渲染组件
   if (component.$template && typeof component.$template === 'string' && renderDOM) {
-    replaceDom(component, rootModule, renderDOM);
+    replaceDom(component, rootModule, renderDOM, routeDOMKey);
     return component;
   } else {
     console.error('renderBootstrap failed: template or rootDom is not exit');
@@ -19,30 +27,54 @@ function instantiateComponent(FindComponent, rootModule, renderDOM) {
   }
 }
 
-function replaceDom(component, rootModule, renderDOM) {
+/**
+ * render DOM in Dodument
+ *
+ * @param {IComponent} component
+ * @param {NvModule} rootModule
+ * @param {Node} renderDOM
+ * @param {string} routeDOMKey
+ */
+function replaceDom(component, rootModule, renderDOM, routeDOMKey) {
   component.renderDom = renderDOM;
   new Compile(component, renderDOM);
   // 挂载组件内的组件
-  mountComponent(component, rootModule, renderDOM);
+  mountComponent(component, rootModule, renderDOM, routeDOMKey);
   component.$componentList.forEach(com => {
     // 渲染组件内的组件
-    replaceDom(com.scope, rootModule, com.dom);
+    replaceDom(com.scope, rootModule, com.dom, routeDOMKey);
   });
 }
 
-function mountComponent(component, rootModule, dom) {
+/**
+ * mount Component in Component
+ *
+ * @param {IComponent} component
+ * @param {NvModule} rootModule
+ * @param {Node} renderDOM
+ * @param {string} routeDOMKey
+ */
+function mountComponent(component, rootModule, dom, routeDOMKey) {
   // 构建组件对象
-  componentsConstructor(component, rootModule, dom);
+  componentsConstructor(component, rootModule, dom, routeDOMKey);
   component.$componentList.forEach(com => {
     com.scope.$components = component.$components;
     if (com.scope.nvOnInit) com.scope.nvOnInit();
   });
 };
 
-function componentsConstructor(component, rootModule, dom) {
+/**
+ * construct components in Component
+ *
+ * @param {IComponent} component
+ * @param {NvModule} rootModule
+ * @param {Node} renderDOM
+ * @param {string} routeDOMKey
+ */
+function componentsConstructor(component, rootModule, dom, routeDOMKey) {
   component.$componentList = [];
 
-  const routerRenderDom = dom.querySelectorAll('router-render')[0];
+  const routerRenderDom = dom.querySelectorAll(routeDOMKey)[0];
 
   component.constructor._injectedComponents.forEach((injectedComponent) => {
     if (!component.$components.find((com) => com.$selector === injectedComponent.$selector)) component.$components.push(injectedComponent);
@@ -89,6 +121,16 @@ function componentsConstructor(component, rootModule, dom) {
   }
 };
 
+/**
+ * build Component and build scope of Component
+ *
+ * @param {IComponent} ComponentClass
+ * @param {any} props
+ * @param {Node} dom
+ * @param {IComponent} component
+ * @param {NvModule} rootModule
+ * @returns IComponent
+ */
 function buildComponentScope(ComponentClass, props, dom, component, rootModule) {
   const _component = factoryCreator(ComponentClass, rootModule);
   _component.props = props;
@@ -97,6 +139,4 @@ function buildComponentScope(ComponentClass, props, dom, component, rootModule) 
   return _component;
 };
 
-module.exports = {
-  instantiateComponent,
-};
+module.exports = instantiateComponent;

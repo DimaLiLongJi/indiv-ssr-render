@@ -1,17 +1,25 @@
 const Window = require('window');
-const { factoryModule } = require('indiv');
 
-const { instantiateComponent } = require('./component');
-const { buildPath, findRoutes, findComponent } = require('./router');
+const instantiateComponent = require('./component');
 const domToString = require('./toString');
+const { buildPath, findRoutes, findComponent } = require('./router');
 
 
 const window = new Window();
 const document = window.document;
+/**
+ * InDiv render DOM to string
+ *
+ * @param {string} url
+ * @param {array<Route>} routes
+ * @param {InDiv} indiv
+ * @returns string
+ */
+function renderToString(url, routes, indiv) {
+  const rootModule = indiv.$rootModule;
+  const routeDOMKey = indiv.$routeDOMKey;
 
-function renderToString(url, routes, RootModule) {
   const pathList = buildPath(url);
-  const rootModule =  factoryModule(RootModule);
   const routesList = findRoutes(pathList, routes, rootModule);
   const componentList = findComponent(routesList, rootModule);
 
@@ -20,10 +28,10 @@ function renderToString(url, routes, RootModule) {
 
   componentList.forEach((component, index) => {
     if (index === 0) {
-      const com = instantiateComponent(component, rootModule, documentFragment);
+      const com = instantiateComponent(component, rootModule, documentFragment, routeDOMKey);
     } else {
-      const el = documentFragment.querySelectorAll('router-render')[index - 1];
-      const com = instantiateComponent(component, rootModule, el);
+      const el = documentFragment.querySelectorAll(routeDOMKey)[index - 1];
+      const com = instantiateComponent(component, rootModule, el, routeDOMKey);
     }
   });
 

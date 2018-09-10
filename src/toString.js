@@ -2,16 +2,19 @@ const Window = require('window');
 
 const window = new Window();
 const document = window.document;
-
+/**
+ * DOM to String
+ *
+ * @returns Function: (ele: node) => string;
+ */
 const domToString = (() => {
-  const DIV = document.createElement("div");
+  const DIV = document.createElement('div');
 
-  if ('outerHTML' in DIV)
-    return(node) => node.outerHTML;
+  if ('outerHTML' in DIV) return(ele) => ele.outerHTML;
 
-  return(node) => {
+  return(ele) => {
     const div = DIV.cloneNode();
-    div.appendChild(node.cloneNode(true));
+    div.appendChild(ele.cloneNode(true));
     return div.innerHTML;
   };
 })();

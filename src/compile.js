@@ -1,10 +1,14 @@
 const Window = require('window');
-const { formatInnerHTML } = require('./utils');
+const formatInnerHTML = require('./utils');
 const { CompileUtil } = require('../../InDiv/build');
 
 const window = new Window();
 const document = window.document;
-
+/**
+ * compile component for SSR-InDiv
+ *
+ * @class Compile
+ */
 class Compile {
   constructor(vm, el) {
     this.$vm = vm;

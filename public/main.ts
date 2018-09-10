@@ -13,8 +13,7 @@ inDiv.bootstrapModule(RootModule);
 inDiv.use(router);
 inDiv.init();
 
-export const ssrData = {
+export default {
   routes,
-  RootModule,
-}
-console.log(1111111, inDiv);
+  inDiv,
+};
