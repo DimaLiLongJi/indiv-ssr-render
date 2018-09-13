@@ -41,7 +41,7 @@ export const navs = () => [
             },
             {
                 name: 'HTTP',
-                to: '/docs/libs',
+                to: '/docs/http',
             },
         ],
     },
