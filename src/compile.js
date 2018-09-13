@@ -4,6 +4,7 @@ const { CompileUtil } = require('../../InDiv/build');
 
 const window = new Window();
 const document = window.document;
+
 /**
  * compile component for SSR-InDiv
  *

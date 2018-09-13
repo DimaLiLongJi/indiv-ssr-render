@@ -2,6 +2,7 @@ const Window = require('window');
 
 const window = new Window();
 const document = window.document;
+
 /**
  * DOM to String
  *

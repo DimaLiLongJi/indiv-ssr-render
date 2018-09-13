@@ -7,6 +7,7 @@ const { buildPath, findRoutes, findComponent } = require('./router');
 
 const window = new Window();
 const document = window.document;
+
 /**
  * InDiv render DOM to string
  *
