@@ -1,6 +1,6 @@
 const Compile = require('./compile');
-// const { factoryCreator } = require('indiv');
-const { factoryCreator } = require('../../InDiv/build');
+const { factoryCreator } = require('indiv');
+// const { factoryCreator } = require('../../InDiv/build');
 
 /**
  * instantiate component

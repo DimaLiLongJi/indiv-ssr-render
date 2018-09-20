@@ -5,7 +5,7 @@
   "main": "/src/index.js",
   "scripts": {
     "start": "rm -rf dist && parcel watch public/main.ts -d dist & nodemon app.js",
-    "build": "rm -rf build && parcel build ./src/index.ts -d build"
+    "build": "rm -rf build && parcel build ./src/index.js -d build && cp -r src/index.d.ts build"
   },
   "repository": {
     "type": "git",
