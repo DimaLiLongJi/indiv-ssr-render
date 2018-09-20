@@ -1,5 +1,5 @@
-// import { Component, HasRender, SetState } from 'indiv';
-import { Component, HasRender, SetState } from '../../../../../InDiv/src';
+import { Component, HasRender, SetState } from 'indiv';
+// import { Component, HasRender, SetState } from '../../../../../InDiv/src';
 import { templateInfo } from '../../../constants/template';
 
 interface Info {
@@ -29,7 +29,7 @@ interface State {
         <h1>{{info.h1}}</h1>
         <p nv-repeat="let rp in info.p">{{rp}}</p>
         <div class="child-info" nv-repeat="let code in info.info">
-          <h2>{{code.title}}</h2>
+          <h2 class="fucker">{{code.title}}</h2>
           <p nv-repeat="let pli in code.p">{{pli}}</p>
           <div class="pchild" nv-if="code.pchild">
             <p nv-repeat="let child in code.pchild">{{child}}</p>

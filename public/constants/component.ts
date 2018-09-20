@@ -99,6 +99,7 @@ export const componentInfo = () => [
         pchild: [
           '可以直接在 template 上使用在 NvModule 注册过的组件标签，并通过 propValue="{state.value}" propValue="{repeatValue}" propFunction="{@fn}" 的引号包裹花括号的写法传递值与方法。',
           '例如在下面例子，在 hero-component 内可以用循环 state.a (nv-repeat)的value persion 并且可以直接在实例方法中触发 handelClick 回调。',
+          '如果该 DOM 会发生频繁变化，并且有可追踪的唯一 key 值，可以添加指令 nv-key, 让 InDiv 直接追踪到 DOM 变化，帮助保存 组件 内的 state。',
           '但是渲染的时候，不可以在模板上直接使用 props 的值，仅仅可以使用 class 实例的方法和 this.state 的值。',
           '在生命周期 constructor 和 nvOnInit 之后，会开启对 this.state 的监听，此监听会监听每个挂载到 this.state 上的属性及属性的属性，因此如果不对 this.state 添加新的属性或对属性的属性添加新的属性的话，可以直接对某个属性赋值。',
           '相反，如果要对 this.state 上的属性 增加属性或删除，则需要使用  setState<S>(newState: {[key: string]: S}) 方法对 this.state 重新添加监听',
@@ -143,7 +144,7 @@ export const componentInfo = () => [
     selector: 'container-component',
     template: ('
       <div>
-        <div nv-repeat="let person in state.b" >
+        <div nv-repeat="let person in state.b" nv-key="person.id">
           <hero-component handelClick="@show" stateValue="state.a" idValue="person.id" ></hero-component>
         </div>
       </div>
@@ -185,7 +186,7 @@ export const componentInfo = () => [
           '5. nvHasRender(): void; 在 nvAfterMount 之后，渲染完成后被触发，每次触发渲染页面（render）都会被触发',
           '6. nvRouteChange(lastRoute?: string, newRoute?: string): void; 监听路由变化，当更换路由后被触发',
           '7. nvOnDestory(): void; 仅仅在路由决定销毁此组件时被触发',
-          '8. nvWatchState(oldData?: any, newData?: any): void; 监听 state 变化，当 state 被更改时被触发',
+          '8. nvWatchState(oldState?: any): void; 监听 state 变化，当 state 被更改时被触发',
           '9. nvReceiveProps(nextProps: any): void; 监听 props 变化，当 props 被更改时被触发',
         ],
         code: `
@@ -231,7 +232,7 @@ export const componentInfo = () => [
       console.log('component in HasRender');
     }
 
-    public nvWatchState(oldData?: any, newData?: any) {
+    public nvWatchState(oldState?: any) {
       console.log('component in WatchState');
     }
 

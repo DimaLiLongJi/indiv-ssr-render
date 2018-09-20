@@ -1,7 +1,7 @@
 import './style.less';
 
-// import { Component, OnInit, SetState, SetLocation, GetLocation } from 'indiv';
-import { Component, OnInit, SetState, SetLocation, GetLocation } from '../../../../InDiv/src';
+import { Component, OnInit, SetState, SetLocation, GetLocation } from 'indiv';
+// import { Component, OnInit, SetState, SetLocation, GetLocation } from '../../../../InDiv/src';
 
 interface State {
     codes: string;

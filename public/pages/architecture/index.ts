@@ -1,7 +1,7 @@
 import './style.less';
 
-// import { Component } from 'indiv';
-import { Component } from '../../../../InDiv/src';
+import { Component } from 'indiv';
+// import { Component } from '../../../../InDiv/src';
 
 import { content } from '../../constants/start';
 

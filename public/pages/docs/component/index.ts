@@ -1,4 +1,5 @@
-import { Component, HasRender, SetState, Injectable, WatchState, OnInit } from '../../../../../InDiv/src';
+import { Component, HasRender, SetState, Injectable, WatchState, OnInit } from 'indiv';
+// import { Component, HasRender, SetState, Injectable, WatchState, OnInit } from '../../../../../InDiv/src';
 import { componentInfo } from '../../../constants/component';
 
 import TestService from '../../../service/test.service';
@@ -32,7 +33,7 @@ interface State {
         <h1>{{info.h1}}</h1>
         <p nv-repeat="let rp in info.p">{{rp}}</p>
         <div class="child-info" nv-repeat="let code in info.info">
-          <h2 nv-on:click="@click(code, $index)">{{code.title}}</h2>
+          <h2 class="fucker" nv-on:click="@click(code, $index)">{{code.title}}</h2>
           <p nv-repeat="let pli in code.p">{{pli}}</p>
           <div class="pchild" nv-if="code.pchild">
             <p nv-repeat="let child in code.pchild">{{child}}</p>
@@ -47,6 +48,8 @@ export default class DocsComponentContainer implements OnInit, HasRender, WatchS
   public state: State;
   public func: string;
   public setState: SetState;
+  public reRender: () => void;
+  public stateWatcher: () => void;
 
   constructor(
     private testS: TestService,
@@ -60,13 +63,12 @@ export default class DocsComponentContainer implements OnInit, HasRender, WatchS
     console.log('DocsComponentContainer has oninit');
   }
   
-  public nvWatchState(o: State, n: State) {
-    console.log('oooooo', o);
-    console.log('nnnnnn', n);
+  public nvWatchState(oldState: State) {
+    console.log('oldState is: ', oldState);
   }
 
   public click(code: any, index: number) {
-    code.title = '1';
+    code.title = '3232';
     this.testS.setData(3);
     console.log(22222, this.testS.getData());
   }

@@ -1,5 +1,5 @@
-// import { Component, HasRender, SetState } from 'indiv';
-import { Component, HasRender, SetState } from '../../../../../InDiv/src';
+import { Component, HasRender, SetState } from 'indiv';
+// import { Component, HasRender, SetState } from '../../../../../InDiv/src';
 import { moduleInfo } from '../../../constants/module';
 
 interface Info {

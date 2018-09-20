@@ -33,7 +33,7 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "indiv": "^1.0.1",
+    "indiv": "^1.1.0",
     "window": "^4.2.5"
   }
 }

@@ -1,5 +1,6 @@
 const Compile = require('./compile');
-const { factoryCreator } = require('indiv');
+// const { factoryCreator } = require('indiv');
+const { factoryCreator } = require('../../InDiv/build');
 
 /**
  * instantiate component
@@ -94,21 +95,43 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
         const attrList = Array.from(nodeAttrs);
         const _propsKeys = {};
         attrList.forEach((attr) => {
-          if (/^\_prop\-(.+)/.test(attr.name)) _propsKeys[attr.name.replace('_prop-', '')] = JSON.parse(attr.value);
+          if (/^\_prop\-(.+)/.test(attr.name)) {
+            _propsKeys[attr.name.replace('_prop-', '')] = JSON.parse(attr.value);
+            node.removeAttribute(attr.name);
+          }
         });
         attrList.forEach((attr) => {
           const attrName = attr.name;
+
+          if ((/^\_prop\-(.+)/.test(attr.name))) return;
+
           const prop = /^\{(.+)\}$/.exec(attr.value);
           if (prop) {
             const valueList = prop[1].split('.');
             const key = valueList[0];
             let _prop = null;
-            if (/^(state.).*/g.test(prop[1])) _prop = component.compileUtil._getVMVal(component, prop[1]);
-            if (/^(\@.).*/g.test(prop[1])) _prop = component.compileUtil._getVMVal(component, prop[1].replace(/^(\@)/, ''));
-            if (_propsKeys.hasOwnProperty(key)) _prop = component.getPropsValue(valueList, _propsKeys[key]);
-            props[attrName] = component.buildProps(_prop);
+            if (/^(state.).*/g.test(prop[1])) {
+              _prop = component.compileUtil._getVMVal(component, prop[1]);
+              props[attrName] = component.buildProps(_prop);
+              return;
+            }
+            if (/^(\@.).*/g.test(prop[1])) {
+              _prop = component.compileUtil._getVMVal(component, prop[1].replace(/^(\@)/, ''));
+              props[attrName] = component.buildProps(_prop);
+              return;
+            }
+            if (_propsKeys.hasOwnProperty(key)) {
+              _prop = component.getPropsValue(valueList, _propsKeys[key]);
+              props[attrName] = component.buildProps(_prop);
+              return;
+            }
+            if (node.repeatData && node.repeatData[key] !== null) {
+              _prop = component.compileUtil._getValueByValue(node.repeatData[key], prop[1], key);
+              props[attrName] = component.buildProps(_prop);
+              return;
+            }
           }
-          node.removeAttribute(attrName);
+          if (attr.name !== 'indiv_repeat_key')  node.removeAttribute(attrName);
         });
       }
 

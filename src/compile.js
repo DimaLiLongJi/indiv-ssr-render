@@ -48,8 +48,14 @@ class Compile {
       }
 
       if (this.isTextNode(node) && reg.test(text)) {
-        const regText = RegExp.$1;
-        if (/(.*\{\{(state.).*\}\}.*)/g.test(text)) this.compileText(node, regText);
+        // const regText = RegExp.$1;
+        // if (/(.*\{\{(state.).*\}\}.*)/g.test(text)) this.compileText(node, regText);
+        const textList = text.match(/(\{\{(state\.)[^\{\}]+?\}\})/g);
+        if (textList && textList.length > 0) {
+          for (let i = 0; i < textList.length; i++) {
+              this.compileText(node, textList[i]);
+          }
+        }
       }
 
       // after compile repeatNode, remove repeatNode
@@ -65,11 +71,7 @@ class Compile {
         if (this.isDirective(attrName)) {
           const dir = attrName.substring(3);
           const exp = attr.value;
-          if (this.isEventDirective(dir)) {
-            this.eventHandler(node, this.$vm, exp, dir);
-          } else {
-            new CompileUtil(fragment).bind(node, this.$vm, exp, dir);
-          }
+          if (!this.isEventDirective(dir)) new CompileUtil(fragment).bind(node, this.$vm, exp, dir);
         }
       });
     }
@@ -81,41 +83,6 @@ class Compile {
 
   compileText(node, exp) {
     new CompileUtil(this.$fragment).templateUpdater(node, this.$vm, exp);
-  }
-
-  eventHandler(node, vm, exp, eventName) {
-    const eventType = eventName.split(':')[1];
-
-    const fnList = exp.replace(/^(\@)/, '').replace(/\(.*\)/, '').split('.');
-    const args = exp.replace(/^(\@)/, '').match(/\((.*)\)/)[1].replace(/\s+/g, '').split(',');
-
-    let fn = vm;
-    fnList.forEach(f => {
-      fn = fn[f];
-    });
-    const func = function(event) {
-      const argsList= [];
-      args.forEach(arg => {
-        if (arg === '') return false;
-        if (arg === '$event') return argsList.push(event);
-        if (arg === '$element') return argsList.push(node);
-        if (/(state.).*/g.test(arg)) return argsList.push(new CompileUtil()._getVMVal(vm, arg));
-        if (/\'.*\'/g.test(arg)) return argsList.push(arg.match(/\'(.*)\'/)[1]);
-        if (!/\'.*\'/g.test(arg) && /^[0-9]*$/g.test(arg)) return argsList.push(Number(arg));
-        if (arg === 'true' || arg === 'false') return argsList.push(arg === 'true');
-      });
-      fn.apply(vm, argsList);
-    };
-    if (eventType && fn) {
-      node[`on${eventType}`] = func;
-      node[`event${eventType}`] = func;
-      if (node.eventTypes) {
-        const eventlist = JSON.parse(node.eventTypes);
-        eventlist.push(eventType);
-        node.eventTypes = eventlist;
-      }
-      if (!node.eventTypes) node.eventTypes = JSON.stringify([eventType]);
-    }
   }
 
   isDirective(attr) {
@@ -138,18 +105,6 @@ class Compile {
       Array.from(nodeAttrs).forEach(attr => {
         const attrName = attr.name;
         if (attrName === 'nv-repeat') result = true;
-      });
-    }
-    return result;
-  }
-
-  isIfNode(node) {
-    const nodeAttrs = node.attributes;
-    let result = false;
-    if (nodeAttrs) {
-      Array.from(nodeAttrs).forEach(attr => {
-        const attrName = attr.name;
-        if (attrName === 'nv-if') result = true;
       });
     }
     return result;

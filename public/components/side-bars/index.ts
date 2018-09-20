@@ -1,7 +1,7 @@
 import './style.less';
 
-// import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injectable } from 'indiv';
-import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injectable } from '../../../../InDiv/src';
+import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injectable } from 'indiv';
+// import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injectable } from '../../../../InDiv/src';
 
 import { navs } from '../../constants/nav';
 

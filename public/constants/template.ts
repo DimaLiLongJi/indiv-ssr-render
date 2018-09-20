@@ -21,7 +21,7 @@ export const templateInfo = () => [
           ` - number => 1,2,3`,
           ` - index > @index`,
           `- 变量: 仅能传递state上的值， 通过state.xxx标示`,
-          `- repeat item: 传递nv-if的值，如： nv-on:click="@show(nav)" nv-repeat="let nav in state.navList"`,
+          `- repeat item: 传递nv-if的值，如： nv-on:click="@show(nav)" nv-repeat="let nav in state.navList" nv-key="nav.id"`,
         ],
         code: `
   <a class="nav" nv-on:click="@goTo($event, $index, 1, 'state', state.nav.to,)">{{state.nav.name}}</a>
@@ -103,8 +103,8 @@ export const templateInfo = () => [
           '此指令十分耗费性能，不建议多用。',
         ],
         code: `
-  <div nv-class="li.class" nv-repeat="let li in state.arrayList">
-    <input nv-model="l.value" nv-repeat="let l in li" />
+  <div nv-class="li.class" nv-repeat="let li in state.arrayList" nv-key="li.id">
+    <input nv-model="l.value" nv-repeat="let l in li" nv-key="l.id"/>
     <demo-component value="{l}"></demo-component>
   </div>
  `,
