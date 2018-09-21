@@ -4,6 +4,9 @@
   "description": "SSR renderer for InDiv",
   "main": "src/index.js",
   "types": "src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "rm -rf dist && parcel watch public/main.ts -d dist & nodemon app.js"
   },
