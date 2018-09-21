@@ -1,7 +1,6 @@
 const Window = require('window');
-const formatInnerHTML = require('./utils');
-// const { CompileUtil } = require('../../InDiv/build');
 const { CompileUtil } = require('indiv');
+const formatInnerHTML = require('./utils');
 
 const window = new Window();
 const document = window.document;
@@ -49,8 +48,6 @@ class Compile {
       }
 
       if (this.isTextNode(node) && reg.test(text)) {
-        // const regText = RegExp.$1;
-        // if (/(.*\{\{(state.).*\}\}.*)/g.test(text)) this.compileText(node, regText);
         const textList = text.match(/(\{\{(state\.)[^\{\}]+?\}\})/g);
         if (textList && textList.length > 0) {
           for (let i = 0; i < textList.length; i++) {

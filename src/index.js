@@ -1,9 +1,7 @@
-const Window = require('window');
-
 const instantiateComponent = require('./component');
-const domToString = require('./toString');
+const domToString = require('./to-string');
 const { buildPath, findRoutes, findComponent } = require('./router');
-
+const Window = require('window');
 
 const window = new Window();
 const document = window.document;
