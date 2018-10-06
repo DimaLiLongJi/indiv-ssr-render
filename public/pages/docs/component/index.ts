@@ -1,5 +1,6 @@
-import { Component, HasRender, SetState, Injectable, WatchState, OnInit } from 'indiv';
-// import { Component, HasRender, SetState, Injectable, WatchState, OnInit } from '../../../../../InDiv/src';
+import { Subscription } from 'rxjs';
+// import { Component, HasRender, SetState, Injected, WatchState, OnInit } from 'indiv';
+import { Component, HasRender, SetState, Injected, WatchState, OnInit, OnDestory, RouteChange } from '../../../../../InDiv/src';
 import { componentInfo } from '../../../constants/component';
 
 import TestService from '../../../service/test.service';
@@ -24,7 +25,7 @@ interface State {
   info: Info[];
 }
 
-@Injectable
+@Injected
 @Component<State>({
   selector: 'docs-component-container',
   template: (`
@@ -33,21 +34,28 @@ interface State {
         <h1>{{info.h1}}</h1>
         <p nv-repeat="let rp in info.p">{{rp}}</p>
         <div class="child-info" nv-repeat="let code in info.info">
-          <h2 class="fucker" nv-on:click="@click(code, $index)">{{code.title}}</h2>
+          <h2 class="fucker" nv-on:click="@click(code, $index)">{{@showText(code.title)}}</h2>
           <p nv-repeat="let pli in code.p">{{pli}}</p>
           <div class="pchild" nv-if="code.pchild">
             <p nv-repeat="let child in code.pchild">{{child}}</p>
           </div>
-          <code-shower codes="{code.code}"></code-shower>
+          <code-shower codes="{code.code}" nv-if="code.code"></code-shower>
         </div>
       </div>
     </div>
   `),
+  // providers: [
+  //   {
+  //     provide: TestService,
+  //     useClass: TestService,
+  //   },
+  // ],
 })
-export default class DocsComponentContainer implements OnInit, HasRender, WatchState {
+export default class DocsComponentContainer implements OnInit, HasRender, WatchState, OnDestory, RouteChange {
   public state: State;
   public func: string;
   public setState: SetState;
+  public subscribeToken: Subscription;
   public reRender: () => void;
   public stateWatcher: () => void;
 
@@ -57,6 +65,7 @@ export default class DocsComponentContainer implements OnInit, HasRender, WatchS
     this.state = {
       info: componentInfo(),
     };
+    this.subscribeToken = this.testS.subscribe(this.subscribe);
   }
 
   public nvOnInit() {
@@ -67,13 +76,29 @@ export default class DocsComponentContainer implements OnInit, HasRender, WatchS
     console.log('oldState is: ', oldState);
   }
 
+  public subscribe(value: any) {
+    console.log('RXJS value from DocsComponentContainer', value);
+  }
+
   public click(code: any, index: number) {
     code.title = '3232';
-    this.testS.setData(3);
-    console.log(22222, this.testS.getData());
+    this.testS.update(3);
+  }
+  
+  public showText(text: any) {
+    return text;
   }
 
   public nvHasRender() {
     console.log('nvHasRender', this.state);
+  }
+
+  public nvOnDestory() {
+    console.log('DocsComponentContainer nvOnDestory');
+    this.subscribeToken.unsubscribe();
+  }
+
+  public nvRouteChange(lastRoute?: string, newRoute?: string) {
+    console.log('DocsComponentContainer nvRouteChange', lastRoute, newRoute);
   }
 }

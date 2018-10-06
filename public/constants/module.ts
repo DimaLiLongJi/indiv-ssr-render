@@ -33,7 +33,14 @@ export const moduleInfo = () => [
     ],
     providers: [
       HeroSearchService,
-      HeroSearchService1,
+      {
+        provide: HeroSearchService1,
+        useClass: HeroSearchService1,
+      },
+      {
+        provide: ValueClass,
+        useValue: '12324',
+      },
     ],
   })
   export default class M1 {}
@@ -51,8 +58,18 @@ export const moduleInfo = () => [
       R1,
     ],
     providers: [
-      HeroSearchService,
-      HeroSearchService1,
+      {
+        provide: 'heroSearchService',
+        useClass: HeroSearchService,
+      },
+      {
+        provide: 'heroSearchService1',
+        useClass: HeroSearchService1,
+      },
+      {
+        provide: 'valueClass',
+        useValue: '12324',
+      },
     ],
   })(M1);
  `,
@@ -154,24 +171,29 @@ export const moduleInfo = () => [
  `,
       },
       {
-        title: '3. providers 提供服务',
+        title: '3. providers 声明被提供的服务',
         p: [
-          'providers?: Function[];;',
+          'providers 用来声明被提供的服务。',
+          '服务可以被声明在 模块 的 providers 中。',
+          '被声明后，所有该模块的组件，被该模块导出的组件，和该模块中的服务都可以直接依赖模块中的所有服务。',
         ],
         pchild: [
-          'providers 用来声明 服务 。',
-          '服务可以被声明在 模块 的 providers 中，被声明后，所有该模块的 组件 和被该模块导出的 组件 都可以直接 依赖注入 该 服务。',
+          'providers 有三种类型',
+          '1. Function (相当于{provide: Function; useClass: Function;}的简写)，最简便的方法，但在 JavaScript 中无法使用',
+          '2. { provide: any; useClass: Function; } 该类型将提供 provide 作为injectToken，并将 useClass 实例化提供给 DI 系统',
+          '3. { provide: any; useValue: any; } 该类型将提供 provide 作为injectToken，并将 useValue 直接提供给 DI 系统',
+          '在 TypeScript 中三种类型都可以使用，但 provide 必须为类(provide: Function)，因为要通过反射拿到 constructor 的参数类型作为 injectToken 进行匹配',
+          '但在 JavaScript 中，仅仅可以使用后两种对象的形式，通过主动声明 provide 为字符串(provide: string)，再通过 Class 的静态属性 injectTokens 进行匹配',
         ],
         code: `
-  // NvModule M2
-  @Injectable
+  // in TypeScript
+  @Injected
   @Component({
     selector: 'pp-childs',
-    template: (\`
+    template: ('
       <div>
         <p>子组件</p>
-      </div>
-    \`),
+      </div>'),
   })
   class PCChild {
     constructor (
@@ -195,27 +217,42 @@ export const moduleInfo = () => [
   class M2 {}
 
 
-  // NvModule M1
-  @Component({
-    selector: 'cc-ontainer',
+  // in JavaScript
+  class PCChild {
+    static injectTokens = [
+      'heroSearchService2'
+    ];
+
+    constructor (
+      private heroS,
+    ) {
+      this.service = heroS;
+    }
+  }
+  Component({
+    selector: 'pp-childs',
     template: (\`
       <div>
-        <pp-childs></pp-childs>
+        <p>子组件</p>
       </div>
     \`),
-  })
-  class Container {}
+  })(PCChild)
 
-  @NvModule({
-    imports: [
-      M2,
-    ],
+  class M2 {}
+  NvModule({
     components: [
-      Container,
+      PCChild,
     ],
-  })
-  export default class M1 {}
-
+    providers: [
+      {
+        provide: 'heroSearchService2',
+        useClass: HeroSearchService2,
+      },
+    ],
+    exports: [
+      PCChild,
+    ],
+  })(M2)
  `,
       },
       {
@@ -227,6 +264,7 @@ export const moduleInfo = () => [
           'exports 用来声明模块被导出的组件（component）。',
           '模块只能导出可声明的类。它不会声明或导出任何其它类型的类。',
           '被模块导出的组件，可以随意在 导入该模块的模块（NvModule） 中的 组件（component） 使用。',
+          '被模块导出的组件，只能获取模块本身声明的依赖，组件本身声明的依赖，和根模块声明的依赖。',
         ],
         code: `
   // NvModule M2
@@ -312,7 +350,6 @@ export const moduleInfo = () => [
     bootstrap: Container,
   })
   export default class M1 {}
-
  `,
       },
     ],

@@ -1,7 +1,7 @@
 import './style.less';
 
-import { Component } from 'indiv';
-// import { Component } from '../../../../InDiv/src';
+// import { Component } from 'indiv';
+import { Component, RouteChange } from '../../../../InDiv/src';
 
 @Component<any>({
   selector: 'docs-container',
@@ -11,6 +11,10 @@ import { Component } from 'indiv';
       </div>
   `),
 })
-export default class DocsContainer {
+export default class DocsContainer implements RouteChange {
   constructor() {}
+
+  public nvRouteChange(lastRoute?: string, newRoute?: string) {
+    console.log('DocsContainer nvRouteChange', lastRoute, newRoute);
+  }
 }

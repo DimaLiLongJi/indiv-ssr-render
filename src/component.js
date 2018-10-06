@@ -1,5 +1,6 @@
 const Compile = require('./compile');
-const { factoryCreator } = require('indiv');
+// const { factoryCreator, CompileUtilForRepeat } = require('indiv');
+const { factoryCreator, CompileUtilForRepeat } = require('../../InDiv/build/index');
 
 /**
  * instantiate component
@@ -114,7 +115,35 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
               props[attrName] = component.buildProps(_prop);
               return;
             }
-            if (/^(\@.).*/g.test(prop[1])) {
+            // if (/^(\@.).*/g.test(prop[1])) {
+            //   _prop = component.compileUtil._getVMVal(component, prop[1].replace(/^(\@)/, ''));
+            //   props[attrName] = component.buildProps(_prop);
+            //   return;
+            // }
+            if (/^(\@.).*\(.*\)$/g.test(prop[1])) {
+              const utilVm = new CompileUtilForRepeat();
+              const fn = utilVm._getVMFunction(component, prop[1]);
+              const args = prop[1].replace(/^(\@)/, '').match(/\((.*)\)/)[1].replace(/\s+/g, '').split(',');
+              const argsList = [];
+              args.forEach(arg => {
+                if (arg === '') return false;
+                if (arg === '$element') return argsList.push(node);
+                if (arg === 'true' || arg === 'false') return argsList.push(arg === 'true');
+                if (/(state.).*/g.test(arg)) return argsList.push(utilVm._getVMVal(component, arg));
+                if (/\'.*\'/g.test(arg)) return argsList.push(arg.match(/\'(.*)\'/)[1]);
+                if (!/\'.*\'/g.test(arg) && /^[0-9]*$/g.test(arg)) return argsList.push(Number(arg));
+                if (node.repeatData) {
+                  // $index in this
+                  Object.keys(node.repeatData).forEach(data => {
+                    if (arg.indexOf(data) === 0 || arg.indexOf(`${data}.`) === 0) return argsList.push(utilVm._getValueByValue(node.repeatData[data], arg, data));
+                  });
+                }
+              });
+              const value = fn.apply(component, argsList);
+              props[attrName] = value;
+              return;
+            }
+            if (/^(\@.).*[^\(.*\)]$/g.test(prop[1])) {
               _prop = component.compileUtil._getVMVal(component, prop[1].replace(/^(\@)/, ''));
               props[attrName] = component.buildProps(_prop);
               return;

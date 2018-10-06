@@ -1,5 +1,5 @@
-import { NvModule } from 'indiv';
-// import { NvModule } from '../../../InDiv/src';
+// import { NvModule } from 'indiv';
+import { NvModule } from '../../../InDiv/src';
 
 import DocsContainer from '../pages/docs';
 import DocsComponentContainer from '../pages/docs/component';
@@ -10,6 +10,8 @@ import DocsRouteContainer from '../pages/docs/route';
 import DocsInDivContainer from '../pages/docs/indiv';
 import DocsLibsContainer from '../pages/docs/libs';
 import DocsHttpContainer from '../pages/docs/http';
+
+import TestService from '../service/test.service';
 
 @NvModule({
     components: [
@@ -24,6 +26,10 @@ import DocsHttpContainer from '../pages/docs/http';
         DocsHttpContainer,
     ],
     providers: [
+        {
+            provide: TestService,
+            useClass: TestService,
+        },
     ],
     exports: [
         DocsContainer,

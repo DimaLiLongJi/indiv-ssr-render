@@ -13,7 +13,7 @@ export const inDivInfo = () => [
         ],
         pchild: [
           '1. 实例化 InDiv',
-          '2. 启动核心 模块（NvModule）',
+          '2. 启动根模块（root NvModule）',
           '3. 使用 use 方法来启用中间件，例如 Route',
           '4. 使用 init 方法启动整个应用',
         ],

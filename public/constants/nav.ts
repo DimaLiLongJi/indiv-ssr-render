@@ -45,4 +45,8 @@ export const navs = () => [
             },
         ],
     },
+    {
+        name: '服务端渲染',
+        to: '/ssr',
+    },
 ];

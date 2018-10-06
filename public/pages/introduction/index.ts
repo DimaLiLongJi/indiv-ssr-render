@@ -1,11 +1,11 @@
 import './style.less';
 
-import { Component } from 'indiv';
-// import { Component } from '../../../../InDiv/src';
+// import { Component } from 'indiv';
+import { Component } from '../../../../InDiv/src';
 
 import { content } from '../../constants/introduction';
 
-type info = {
+type Info = {
     [x: string]: any;
     h1: string;
     p: string[];
@@ -13,7 +13,7 @@ type info = {
 }
 
 interface State {
-    info: info[];
+    info: Info[];
 }
 @Component<State>({
     selector: 'introduction-container',

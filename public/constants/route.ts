@@ -18,10 +18,10 @@ export const routeInfo = () => [
           '每个对应的路由应该有四个键值对，可以引入 TRouter 来看所有类型',
         ],
         pchild: [
-          '1. path: string; 路径，提供代码直接更改或在浏览器里访问',
+          '1. path: string; 路径，提供代码直接更改或在浏览器里访问, 可以设置成 /:id 这种params模式，但不能设置其他同级路由。',
           '2. component?: string; 需要渲染的 组件（component） 的 selector，如果没有 子路由（children） 并且有 重定向（redirectTo） 可以不写该项 ',
-          '3. redirectTo?: string; 需要重定向的地址，改地址为路由的完整路径。',
-          '4. children?: TRouter[]， 子路由，重复上述所有配置',
+          '3. redirectTo?: string; 当访问此路径时，需要重定向的地址，值为路由的完整路径。',
+          '4. children?: TRouter[]， 子路由，TRouter 重复上述所有配置',
         ],
         code: `
   const routes: TRouter[] = [
@@ -46,6 +46,10 @@ export const routeInfo = () => [
             {
                 path: '/template',
                 redirectTo: '/docs/component',
+                children: [{
+                  path: '/:id',
+                  component: 'docs-id-container',
+                }]
             },
           ],
         },
@@ -86,11 +90,13 @@ export const routeInfo = () => [
           '在组件（component）里可以通过引入相应的类型来使用。',
         ],
         pchild: [
-          '1. SetLocation: <Q = any, P = any>(path: string, query?: Q, params?: P) => void;',
-          '2. GetLocation: () => { path: string; query?: any; params?: any; };',
+          '1. SetLocation: <Q, P>(path: string, query?: Q, params?: P, title?: string) => void;',
+          '2. GetLocation: () => { path: string; query?: any; params?: any; data?: any; };',
           'path: string; 当前路由的路径',
           'query?: string; 拼在路由后面的query, request.query',
-          'params?: any; 传递到路由的数据',
+          'params?: any; 如果该路径为 /:id 类似这种模式，则params 为 {id: 123}',
+          'data?: any; 额外传递的值',
+          'title?: string; 跳转路由时需要更改的 title',
         ],
         code: `
   import { GetLocation, SetLocation } from 'InDiv';

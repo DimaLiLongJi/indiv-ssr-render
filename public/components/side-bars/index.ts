@@ -1,7 +1,8 @@
 import './style.less';
 
-import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injectable } from 'indiv';
-// import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injectable } from '../../../../InDiv/src';
+import { Subscription } from 'rxjs';
+// import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injected } from 'indiv';
+import { Component, OnInit, RouteChange, SetState, SetLocation, GetLocation, Injected, OnDestory } from '../../../../InDiv/src';
 
 import { navs } from '../../constants/nav';
 
@@ -17,7 +18,7 @@ interface State {
     navs: nav[];
 }
 
-@Injectable
+@Injected
 @Component<State>({
     selector: 'side-bar',
     template: (`
@@ -31,17 +32,22 @@ interface State {
         </div>
     `),
 })
-export default class SideBar implements OnInit, RouteChange {
+export default class SideBar implements OnInit, RouteChange, OnDestory {
     public state: State;
     public props: any;
     public getLocation: GetLocation;
     public setLocation: SetLocation;
     public setState: SetState;
+    public subscribeToken: Subscription;
 
     constructor(
         private testS: TestService,
     ) {
-        console.log('service data', this.testS.getData());
+        this.subscribeToken = this.testS.subscribe(this.subscribe);
+    }
+
+    public subscribe(value: any) {
+        console.log('RXJS value from SideBar', value);
     }
 
     public nvOnInit() {
@@ -53,9 +59,14 @@ export default class SideBar implements OnInit, RouteChange {
     }
 
     public nvRouteChange(lastRoute?: string, newRoute?: string): void {
-        console.log(111111, newRoute);
+        // console.log(111111, newRoute);
         this.showColor();
     }
+
+    public nvOnDestory() {
+        console.log('SideBar nvOnDestory');
+        this.subscribeToken.unsubscribe();
+      }
 
     public showColor() {
         const location = this.getLocation();
@@ -72,6 +83,5 @@ export default class SideBar implements OnInit, RouteChange {
                 });
             }
         });
-        console.log('service data', this.testS.getData());
     }
 }
