@@ -1,6 +1,5 @@
 const Compile = require('./compile');
-// const { factoryCreator, CompileUtilForRepeat } = require('indiv');
-const { factoryCreator, CompileUtilForRepeat } = require('../../InDiv/build/index');
+const { factoryCreator, CompileUtilForRepeat } = require('indiv');
 
 /**
  * instantiate component
@@ -38,7 +37,7 @@ function instantiateComponent(FindComponent, rootModule, renderDOM, routeDOMKey)
  */
 function replaceDom(component, rootModule, renderDOM, routeDOMKey) {
   component.renderDom = renderDOM;
-  new Compile(component, renderDOM);
+  new Compile(renderDOM, component);
   // 挂载组件内的组件
   mountComponent(component, rootModule, renderDOM, routeDOMKey);
   component.$componentList.forEach(com => {
@@ -77,8 +76,8 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
 
   const routerRenderDom = dom.querySelectorAll(routeDOMKey)[0];
 
-  component.constructor._injectedComponents.forEach((injectedComponent) => {
-    if (!component.$components.find((com) => com.$selector === injectedComponent.$selector)) component.$components.push(injectedComponent);
+  component.constructor._injectedComponents.forEach((value, key) => {
+    if (!component.$components.find(component => component.$selector === key)) component.$components.push(value);
   });
 
   for (let i = 0; i <= component.$components.length - 1; i++) {
@@ -105,6 +104,14 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
 
           if ((/^\_prop\-(.+)/.test(attr.name))) return;
 
+          const attrNameSplit = attrName.split('-');
+          if (attrNameSplit.length > 1) {
+            attrNameSplit.forEach((name, index) => {
+              if (index === 0) attrName = name;
+              if (index !== 0) attrName += name.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+            });
+          }
+
           const prop = /^\{(.+)\}$/.exec(attr.value);
           if (prop) {
             const valueList = prop[1].split('.');
@@ -115,11 +122,6 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
               props[attrName] = component.buildProps(_prop);
               return;
             }
-            // if (/^(\@.).*/g.test(prop[1])) {
-            //   _prop = component.compileUtil._getVMVal(component, prop[1].replace(/^(\@)/, ''));
-            //   props[attrName] = component.buildProps(_prop);
-            //   return;
-            // }
             if (/^(\@.).*\(.*\)$/g.test(prop[1])) {
               const utilVm = new CompileUtilForRepeat();
               const fn = utilVm._getVMFunction(component, prop[1]);

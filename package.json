@@ -40,15 +40,16 @@
     "eslint-import-resolver-babel-module": "^4.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-react": "^7.11.1",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "less": "^3.8.1",
     "nodemon": "^1.18.4",
     "parcel-bundler": "^1.9.7",
+    "rxjs": "^6.3.3",
     "tslint": "^5.11.0",
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "indiv": "^1.1.0",
+    "indiv": "^1.2.0",
     "window": "4.2.5"
   }
 }

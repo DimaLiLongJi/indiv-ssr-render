@@ -1,5 +1,5 @@
-// import { Component, SetState } from 'indiv';
-import { Component, SetState } from '../../../../../InDiv/src';
+import { Component, SetState } from 'indiv';
+// import { Component, SetState } from '../../../../../InDiv/src';
 import { routeInfo } from '../../../constants/route';
 
 interface Info {
@@ -25,7 +25,7 @@ interface State {
   selector: 'docs-route-container',
   template: (`
     <div class="page-wrapper">
-      <div class="info-content" nv-repeat="let info in state.info">
+      <div class="info-content" nv-repeat="let info in $.info">
         <h1>{{info.h1}}</h1>
         <p nv-repeat="let rp in info.p">{{rp}}</p>
         <div class="child-info" nv-repeat="let code in info.info">

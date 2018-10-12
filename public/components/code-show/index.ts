@@ -1,7 +1,7 @@
 import './style.less';
 
-// import { Component, OnInit, SetState, SetLocation, GetLocation } from 'indiv';
-import { Component, OnInit, SetState, SetLocation, GetLocation } from '../../../../InDiv/src';
+import { Component, OnInit, SetState, SetLocation, GetLocation } from 'indiv';
+// import { Component, OnInit, SetState, SetLocation, GetLocation } from '../../../../InDiv/src';
 
 interface State {
     codes: string;
@@ -13,7 +13,7 @@ interface State {
         <div nv-on:click="@show()" class="code-show-container">
             <blockquote>
                 <pre>
-                    <code>{{state.codes}}</code>
+                    <code>{{$.codes}}</code>
                 </pre>
             </blockquote>
         </div>

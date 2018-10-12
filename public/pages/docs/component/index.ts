@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
-// import { Component, HasRender, SetState, Injected, WatchState, OnInit } from 'indiv';
-import { Component, HasRender, SetState, Injected, WatchState, OnInit, OnDestory, RouteChange } from '../../../../../InDiv/src';
+import { Component, HasRender, SetState, Injected, WatchState, OnInit, OnDestory, RouteChange } from 'indiv';
+// import { Component, HasRender, SetState, Injected, WatchState, OnInit, OnDestory, RouteChange } from '../../../../../InDiv/src';
 import { componentInfo } from '../../../constants/component';
 
 import TestService from '../../../service/test.service';
@@ -30,7 +30,7 @@ interface State {
   selector: 'docs-component-container',
   template: (`
     <div class="page-wrapper">
-      <div class="info-content" nv-repeat="let info in state.info">
+      <div class="info-content" nv-repeat="let info in $.info">
         <h1>{{info.h1}}</h1>
         <p nv-repeat="let rp in info.p">{{rp}}</p>
         <div class="child-info" nv-repeat="let code in info.info">

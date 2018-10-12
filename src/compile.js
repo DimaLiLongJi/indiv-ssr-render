@@ -1,6 +1,5 @@
 const Window = require('window');
-// const { CompileUtil } = require('indiv');
-const { CompileUtil } = require('../../InDiv/build/index');
+const { CompileUtil } = require('indiv');
 const formatInnerHTML = require('./utils');
 
 const window = new Window();
@@ -12,7 +11,7 @@ const document = window.document;
  * @class Compile
  */
 class Compile {
-  constructor(vm, el) {
+  constructor(el, vm) {
     this.$vm = vm;
     this.$fragment = this.node2Fragment();
     this.init();

@@ -1,7 +1,7 @@
 import './style.less';
 
-// import { Component } from 'indiv';
-import { Component, RouteChange } from '../../../../InDiv/src';
+import { Component } from 'indiv';
+// import { Component, RouteChange } from '../../../../InDiv/src';
 
 @Component<any>({
   selector: 'docs-container',

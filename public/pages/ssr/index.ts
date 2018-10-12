@@ -1,7 +1,7 @@
 import './style.less';
 
-// import { Component } from 'indiv';
-import { Component } from '../../../../InDiv/src';
+import { Component } from 'indiv';
+// import { Component } from '../../../../InDiv/src';
 
 import { ssrInfo } from '../../constants/ssr';
 
@@ -28,7 +28,7 @@ interface State {
     selector: 'ssr-container',
     template: (`
         <div class="page-container">
-            <div class="info-content" nv-repeat="let info in state.info">
+            <div class="info-content" nv-repeat="let info in $.info">
                 <h1>{{info.h1}}</h1>
                 <p nv-repeat="let rp in info.p">{{rp}}</p>
                 <div class="child-info" nv-repeat="let code in info.info">

@@ -1,5 +1,5 @@
-// import { NvModule } from 'indiv';
-import { NvModule } from '../../../InDiv/src';
+import { NvModule } from 'indiv';
+// import { NvModule } from '../../../InDiv/src';
 
 import IntroductionContainer from '../pages/introduction';
 
