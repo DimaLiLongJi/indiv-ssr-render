@@ -12,7 +12,7 @@ SSR for InDiv
 ## Environment
 
   - Node.js v6 or newer
-  - Indiv 
+  - Indiv  v1.2.0+
 
 ## Basic Usage
 
