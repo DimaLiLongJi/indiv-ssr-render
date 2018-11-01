@@ -1,4 +1,5 @@
 const Compile = require('./compile');
+const { buildProps, getPropsValue, buildComponentScope } = require('./render-utils');
 const { factoryCreator, CompileUtilForRepeat } = require('indiv');
 
 /**
@@ -119,7 +120,7 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
             let _prop = null;
             if (/^(state.).*/g.test(prop[1])) {
               _prop = component.compileUtil._getVMVal(component, prop[1]);
-              props[attrName] = component.buildProps(_prop);
+              props[attrName] = buildProps(_prop, component);
               return;
             }
             if (/^(\@.).*\(.*\)$/g.test(prop[1])) {
@@ -147,17 +148,17 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
             }
             if (/^(\@.).*[^\(.*\)]$/g.test(prop[1])) {
               _prop = component.compileUtil._getVMVal(component, prop[1].replace(/^(\@)/, ''));
-              props[attrName] = component.buildProps(_prop);
+              props[attrName] = buildProps(_prop, component);
               return;
             }
             if (_propsKeys.hasOwnProperty(key)) {
-              _prop = component.getPropsValue(valueList, _propsKeys[key]);
-              props[attrName] = component.buildProps(_prop);
+              _prop = getPropsValue(valueList, _propsKeys[key]);
+              props[attrName] = buildProps(_prop, component);
               return;
             }
             if (node.repeatData && node.repeatData[key] !== null) {
               _prop = component.compileUtil._getValueByValue(node.repeatData[key], prop[1], key);
-              props[attrName] = component.buildProps(_prop);
+              props[attrName] = buildProps(_prop, component)
               return;
             }
           }
@@ -172,24 +173,6 @@ function componentsConstructor(component, rootModule, dom, routeDOMKey) {
       });
     });
   }
-};
-
-/**
- * build Component and build scope of Component
- *
- * @param {IComponent} ComponentClass
- * @param {any} props
- * @param {Node} dom
- * @param {IComponent} component
- * @param {NvModule} rootModule
- * @returns IComponent
- */
-function buildComponentScope(ComponentClass, props, dom, component, rootModule) {
-  const _component = factoryCreator(ComponentClass, rootModule);
-  _component.props = props;
-  _component.renderDom = dom;
-  _component.$components = component.$components;
-  return _component;
 };
 
 module.exports = instantiateComponent;

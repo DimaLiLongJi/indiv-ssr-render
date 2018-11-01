@@ -1,4 +1,4 @@
-const renderToString = require('./src');
+const renderToString = require('./build');
 
 const render = (url) => {
   const ssrData = require('./dist/main');

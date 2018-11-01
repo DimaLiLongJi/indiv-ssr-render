@@ -1,7 +1,6 @@
 import './style.less';
 
-import { Component, OnInit, SetState, SetLocation, GetLocation } from 'indiv';
-// import { Component, OnInit, SetState, SetLocation, GetLocation } from '../../../../InDiv/src';
+import { Component, OnInit } from 'indiv';
 
 interface State {
     codes: string;
@@ -22,9 +21,6 @@ interface State {
 export default class CodeShower implements OnInit {
     public state: State;
     public props: any;
-    public getLocation: GetLocation;
-    public setLocation: SetLocation;
-    public setState: SetState;
 
     public nvOnInit() {
         this.state = {
