@@ -5,6 +5,10 @@ SSR for InDiv
 [中文](https://dimalilongji.github.io/indiv-doc/ssr)
 [npm](https://www.npmjs.com/package/@indiv/ssr-renderer)
 
+This package only support for indiv v1.2.0 - v1.2.1.
+
+In indiv2+ please use [@indiv/platform-server](https://www.npmjs.com/package/@indiv/platform-server)
+
 ## Demo
   - `npm start`
   - open `http://localhost:3234/indiv-doc`
@@ -12,7 +16,7 @@ SSR for InDiv
 ## Environment
 
   - Node.js v6 or newer
-  - Indiv  v1.2.0+
+  - Indiv  v1.2.0 v1.2.1
 
 ## Basic Usage
 
